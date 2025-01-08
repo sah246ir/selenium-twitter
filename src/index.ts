@@ -41,21 +41,24 @@ app.post("/run",async(req,res)=>{
     try{
         // const trends = await runSelenium()
         const trends = await runPuppeteer()
+        if(!trends){
+        return res.status(400).redirect("/")  
+        }
         const rec:Record<string,string> = {}
-        trends.forEach((t,i)=>{
+        trends?.trends.forEach((t,i)=>{
             rec["trend"+(i+1)] = t
         })
         console.log(trends) 
         const doc = await client.db().collection("trends").insertOne({
             ...rec,
             timestamp:new Date(),
-            ip:"",
+            ip:trends?.ip,
             selenium_script_id: uuidv4() 
         })
         res.status(200).redirect("/") 
     }catch(e){
         console.log(e)
-        res.status(500).send("An error occurred while fetching trends.");
+        res.status(500).redirect("/") 
 
     }
 })
@@ -68,13 +71,14 @@ app.get("/", async (req, res) => {
         // Define default trends
         const data:any = record.pop() || {};
         const trend = {
-            timestamp: data.timestamp || "N/A",
+            timestamp: data.timestamp || "Date not found",
             selenium_script_id: data.selenium_script_id || "N/A",
             trend1: data.trend1 || "No data available",
             trend2: data.trend2 || "No data available",
             trend3: data.trend3 || "No data available",
             trend4: data.trend4 || "No data available",
             trend5: data.trend5 || "No data available",
+            ip:     data.ip || "No data available"
         };
 
         // Render the template with default-safe data

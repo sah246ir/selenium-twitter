@@ -38,9 +38,8 @@
     <div class="container">
         <h1>API Interface</h1>
         <form method="post" action="<%=server%>/run"><button id="fetchButton">Fetch Latest Trends</button></form>
-
-        <h1 style="margin-bottom: 5px;">Latest Trends</h1>
-        <p style="margin-top: 0%;">Last fetched on <strong><%=trend.timestamp%></strong></p>
+        <h1 style="margin-bottom: 5px;">These are the most happening topics as on <%=trend.timestamp%></h1>
+        <p style="margin-top: 0%;"><strong>IP: <%=trend.ip%></strong></p>
         <p style="margin-top: 0%;">selenium script id <strong><%=trend.selenium_script_id%></strong></p>
         <ol id="output">
            <li><%=trend.trend1%></li>
