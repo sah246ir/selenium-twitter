@@ -11,11 +11,13 @@ export const runPuppeteer = async () => {
             '--disable-infobars',
             '--no-sandbox',
             `--proxy-server=${process.env.PROXY_HOST}`, 
+             '--disable-setuid-sandbox'
         ],
         extraPrefsFirefox: {
             // Reduce logging from Firefox itself
             'remote.log.level': 'Info',
         },
+        timeout:60000
     });
 
     const page = await browser.newPage();
