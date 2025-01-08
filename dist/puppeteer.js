@@ -9,7 +9,7 @@ let proxyURL = '44.219.175.186:80';
 const runPuppeteer = async () => {
     const browser = await puppeteer_1.default.launch({
         browserURL: 'firefox',
-        headless: false,
+        headless: true,
         dumpio: true,
         args: [
             // Add arguments to reduce internal warnings
@@ -45,7 +45,7 @@ const runPuppeteer = async () => {
             }
         });
         // Navigate to the login page
-        await page.goto("https://myexternalip.com/raw", { waitUntil: "networkidle2", timeout: 610000 });
+        const ip = await page.goto("https://myexternalip.com/raw", { waitUntil: "networkidle2", timeout: 610000 });
         console.log("Proxy IP:", await page.evaluate(() => document.body.innerText.trim()));
         await page.goto("https://x.com/i/flow/login", { waitUntil: "networkidle2", timeout: 610000 });
         // Wait for the username input field and enter username
@@ -79,11 +79,11 @@ const runPuppeteer = async () => {
             i += 1;
         }
         console.log(`Trends found: ${trends.length}`);
-        return trendlist;
+        return { trends: trendlist, ip };
     }
     catch (error) {
         console.error("Error scraping trends:", error);
-        return [];
+        return undefined;
     }
     finally {
         await browser.close();

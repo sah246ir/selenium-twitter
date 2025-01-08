@@ -9,6 +9,7 @@ import { runSelenium } from "./selenium";
 import { MongoClient, ServerApiVersion } from "mongodb";
 import { v4 as uuidv4 } from 'uuid';
 import { runPuppeteer } from "./puppeteer";
+import { formatTimestamp } from "./utils";
 config()
 const app = express() 
 app.set('views', process.env.VIEWS);
@@ -71,7 +72,7 @@ app.get("/", async (req, res) => {
         // Define default trends
         const data:any = record.pop() || {};
         const trend = {
-            timestamp: data.timestamp || "Date not found",
+            timestamp: formatTimestamp(data.timestamp) ,
             selenium_script_id: data.selenium_script_id || "N/A",
             trend1: data.trend1 || "No data available",
             trend2: data.trend2 || "No data available",
