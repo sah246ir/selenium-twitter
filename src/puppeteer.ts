@@ -4,7 +4,7 @@ let proxyURL = '44.219.175.186:80';
 export const runPuppeteer = async () => {
     const browser = await puppeteer.launch({
         browserURL: 'firefox', // Specify Firefox browser
-        headless: true, // Set to true if you want headless mode
+        headless: false, // Set to true if you want headless mode
         dumpio: true, // Show browser logs
         args: [
             // Add arguments to reduce internal warnings
@@ -46,11 +46,21 @@ export const runPuppeteer = async () => {
             }
         });
         // Navigate to the login page
-        const ip = await page.goto("https://myexternalip.com/raw", { waitUntil: "networkidle2",timeout:610000 });
-        console.log("Proxy IP:", await page.evaluate(() => document.body.innerText.trim()));
+        await page.goto("https://myexternalip.com/raw", { waitUntil: "networkidle2",timeout:610000 });
+        const ip = await page.evaluate(() => document.body.innerText.trim());
         await page.goto("https://x.com/i/flow/login", { waitUntil: "networkidle2",timeout:610000 });
 
         // Wait for the username input field and enter username
+        await page.waitForSelector("input[name='text']", { timeout: 210000 });
+
+        const sus = await page.locator("::-p-xpath(//span[contains(text(),'There was unusual login activity on your account.')])");
+        if(sus){
+            await page.type("input[name='text']", process.env.X_MAIL || "");
+            const nextButton1 = await page.locator("::-p-xpath(//span[contains(text(),'Next')])");
+            if (nextButton1) {
+                await nextButton1.click();
+            }
+        }
         await page.waitForSelector("input[name='text']", { timeout: 210000 });
         await page.type("input[name='text']", process.env.X_USERNAME || "");
         const nextButton = await page.locator("::-p-xpath(//span[contains(text(),'Next')])");
@@ -82,7 +92,7 @@ export const runPuppeteer = async () => {
             i+=1
         } 
         console.log(`Trends found: ${trends.length}`);
-        return {trends:trendlist,ip}; 
+        return {trends:trendlist,ip:ip}; 
     } catch (error) {
         console.error("Error scraping trends:", error);
         return undefined;

@@ -9,18 +9,20 @@ let proxyURL = '44.219.175.186:80';
 const runPuppeteer = async () => {
     const browser = await puppeteer_1.default.launch({
         browserURL: 'firefox',
-        headless: true,
+        headless: false,
         dumpio: true,
         args: [
             // Add arguments to reduce internal warnings
             '--disable-infobars',
             '--no-sandbox',
             `--proxy-server=${process.env.PROXY_HOST}`,
+            '--disable-setuid-sandbox'
         ],
         extraPrefsFirefox: {
             // Reduce logging from Firefox itself
             'remote.log.level': 'Info',
         },
+        timeout: 60000
     });
     const page = await browser.newPage();
     await page.authenticate({
@@ -49,6 +51,15 @@ const runPuppeteer = async () => {
         console.log("Proxy IP:", await page.evaluate(() => document.body.innerText.trim()));
         await page.goto("https://x.com/i/flow/login", { waitUntil: "networkidle2", timeout: 610000 });
         // Wait for the username input field and enter username
+        await page.waitForSelector("input[name='text']", { timeout: 210000 });
+        const sus = await page.locator("::-p-xpath(//span[contains(text(),'There was unusual login activity on your account.')])");
+        if (sus) {
+            await page.type("input[name='text']", process.env.X_MAIL || "");
+            const nextButton1 = await page.locator("::-p-xpath(//span[contains(text(),'Next')])");
+            if (nextButton1) {
+                await nextButton1.click();
+            }
+        }
         await page.waitForSelector("input[name='text']", { timeout: 210000 });
         await page.type("input[name='text']", process.env.X_USERNAME || "");
         const nextButton = await page.locator("::-p-xpath(//span[contains(text(),'Next')])");
