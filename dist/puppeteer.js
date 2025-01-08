@@ -47,8 +47,8 @@ const runPuppeteer = async () => {
             }
         });
         // Navigate to the login page
-        const ip = await page.goto("https://myexternalip.com/raw", { waitUntil: "networkidle2", timeout: 610000 });
-        console.log("Proxy IP:", await page.evaluate(() => document.body.innerText.trim()));
+        await page.goto("https://myexternalip.com/raw", { waitUntil: "networkidle2", timeout: 610000 });
+        const ip = await page.evaluate(() => document.body.innerText.trim());
         await page.goto("https://x.com/i/flow/login", { waitUntil: "networkidle2", timeout: 610000 });
         // Wait for the username input field and enter username
         await page.waitForSelector("input[name='text']", { timeout: 210000 });
@@ -90,7 +90,7 @@ const runPuppeteer = async () => {
             i += 1;
         }
         console.log(`Trends found: ${trends.length}`);
-        return { trends: trendlist, ip };
+        return { trends: trendlist, ip: ip };
     }
     catch (error) {
         console.error("Error scraping trends:", error);
