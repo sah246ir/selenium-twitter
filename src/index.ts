@@ -65,7 +65,7 @@ app.get("/", async (req, res) => {
 
         // Define default trends
         const data:any = record.pop() || {};
-        const trends = {
+        const trend = {
             timestamp: data.timestamp || "N/A",
             selenium_script_id: data.selenium_script_id || "N/A",
             trend1: data.trend1 || "No data available",
@@ -76,7 +76,7 @@ app.get("/", async (req, res) => {
         };
 
         // Render the template with default-safe data
-        res.status(200).render("index", trends);
+        res.status(200).render("index", {trend,server:process.env.SERVER_URI});
     } catch (error) {
         console.error("Error fetching trends:", error);
         res.status(500).send("An error occurred while fetching trends.");

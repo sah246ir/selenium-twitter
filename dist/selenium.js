@@ -13,9 +13,9 @@ const PROXY_PASSWORD = process.env.PROXY_PASSWORD; // Replace with your ProxyMes
 const proxyString = `http://${PROXY_USERNAME}:${PROXY_PASSWORD}@${PROXY_HOST}`;
 const runSelenium = async () => {
     const options = new firefox_1.Options();
-    options.addArguments("--headless");
-    options.addArguments("--no-sandbox");
-    options.addArguments("--window-size=1920,1080");
+    // options.addArguments("--headless");
+    // options.addArguments("--no-sandbox");
+    // options.addArguments("--window-size=1920,1080");
     // options.addArguments(`--proxy-pac-url=${PAC_URL}`);
     // options.addArguments("--proxy-server="+proxyString);
     // options.setPreference("network.proxy.type", 1)

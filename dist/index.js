@@ -64,7 +64,7 @@ app.get("/", async (req, res) => {
         const record = await client.db().collection("trends").find().sort({ "timestamp": -1 }).limit(1).toArray();
         // Define default trends
         const data = record.pop() || {};
-        const trends = {
+        const trend = {
             timestamp: data.timestamp || "N/A",
             selenium_script_id: data.selenium_script_id || "N/A",
             trend1: data.trend1 || "No data available",
@@ -74,7 +74,7 @@ app.get("/", async (req, res) => {
             trend5: data.trend5 || "No data available",
         };
         // Render the template with default-safe data
-        res.status(200).render("index", trends);
+        res.status(200).render("index", { trend, server: process.env.SERVER_URI });
     }
     catch (error) {
         console.error("Error fetching trends:", error);
