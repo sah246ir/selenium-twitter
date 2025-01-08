@@ -8,6 +8,7 @@ import { config } from "dotenv";
 import { runSelenium } from "./selenium";
 import { MongoClient, ServerApiVersion } from "mongodb";
 import { v4 as uuidv4 } from 'uuid';
+import { runPuppeteer } from "./puppeteer";
 config()
 const app = express() 
 app.set('views', process.env.VIEWS);
@@ -38,7 +39,8 @@ client.connect().then(()=>{
 })
 app.post("/run",async(req,res)=>{
     try{
-        const trends = await runSelenium()
+        // const trends = await runSelenium()
+        const trends = await runPuppeteer()
         const rec:Record<string,string> = {}
         trends.forEach((t,i)=>{
             rec["trend"+(i+1)] = t

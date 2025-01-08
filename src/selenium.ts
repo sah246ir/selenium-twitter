@@ -1,4 +1,4 @@
-import { Builder, Browser, By, until } from "selenium-webdriver";
+import { Builder, Browser, By, until, WebDriver } from "selenium-webdriver";
 import { Options } from "selenium-webdriver/firefox";
 
 // Define function to get elements inside the timeline
@@ -10,16 +10,18 @@ const PROXY_HOST = process.env.PROXY_HOST;
 const PROXY_USERNAME = process.env.PROXY_USERNAME;
 const PROXY_PASSWORD = process.env.PROXY_PASSWORD; // Replace with your ProxyMesh password
 const proxyString = `http://${PROXY_USERNAME}:${PROXY_PASSWORD}@${PROXY_HOST}`;
+
+
 export const runSelenium = async () => {
     const options = new Options();
-    options.addArguments("--headless");
-    options.addArguments("--no-sandbox");
-    options.addArguments("--window-size=1920,1080");
+    // options.addArguments("--headless");
+    // options.addArguments("--no-sandbox");
+    // options.addArguments("--window-size=1920,1080");
 
     // options.addArguments(`--proxy-pac-url=${PAC_URL}`);
     // options.addArguments("--proxy-server="+proxyString);
-    // options.setPreference("network.proxy.type", 1)
-    // options.setPreference("network.proxy.http", ""+proxyString)
+    options.setPreference("network.proxy.type", 1)
+    options.setPreference("network.proxy.http", "20.222.243.172:443")
     // options.setPreference("network.proxy.http_port", "31280")
     // options.setPreference("network.proxy.ssl", ""+proxyString) 
     // options.setPreference("network.proxy.ssl_port", 31280) 
@@ -30,10 +32,10 @@ export const runSelenium = async () => {
         .setFirefoxOptions(options)
         .build();
 
-    try {
+    try { 
         // Log into X account 
-        // await driver.get('http://ip-api.com/json');
-        // await driver.sleep(4000);
+        await driver.get('https://myexternalip.com/raw');
+        await driver.sleep(4000);
         await driver.get('https://x.com/i/flow/login');
 
         // Wait until the username input field is present and interact with it
@@ -57,7 +59,8 @@ export const runSelenium = async () => {
         );
         await passwordInput.click();
         await passwordInput.sendKeys(process.env.X_PASSWORD || "");
-
+        const a = await driver.getPageSource()
+        console.log(a)
         const loginButton = await driver.wait(
             until.elementLocated(By.xpath("//span[contains(text(),'Log in')]")),
             10000

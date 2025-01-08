@@ -18,8 +18,8 @@ const runSelenium = async () => {
     // options.addArguments("--window-size=1920,1080");
     // options.addArguments(`--proxy-pac-url=${PAC_URL}`);
     // options.addArguments("--proxy-server="+proxyString);
-    // options.setPreference("network.proxy.type", 1)
-    // options.setPreference("network.proxy.http", ""+proxyString)
+    options.setPreference("network.proxy.type", 1);
+    options.setPreference("network.proxy.http", "20.222.243.172:443");
     // options.setPreference("network.proxy.http_port", "31280")
     // options.setPreference("network.proxy.ssl", ""+proxyString) 
     // options.setPreference("network.proxy.ssl_port", 31280) 
@@ -30,8 +30,8 @@ const runSelenium = async () => {
         .build();
     try {
         // Log into X account 
-        // await driver.get('http://ip-api.com/json');
-        // await driver.sleep(4000);
+        await driver.get('https://myexternalip.com/raw');
+        await driver.sleep(4000);
         await driver.get('https://x.com/i/flow/login');
         // Wait until the username input field is present and interact with it
         const usernameInput = await driver.wait(selenium_webdriver_1.until.elementLocated(selenium_webdriver_1.By.xpath("//input[@name='text']")), 10000 // Timeout in milliseconds
@@ -44,6 +44,8 @@ const runSelenium = async () => {
         const passwordInput = await driver.wait(selenium_webdriver_1.until.elementLocated(selenium_webdriver_1.By.xpath("//input[@name='password']")), 10000);
         await passwordInput.click();
         await passwordInput.sendKeys(process.env.X_PASSWORD || "");
+        const a = await driver.getPageSource();
+        console.log(a);
         const loginButton = await driver.wait(selenium_webdriver_1.until.elementLocated(selenium_webdriver_1.By.xpath("//span[contains(text(),'Log in')]")), 10000);
         await driver.wait(selenium_webdriver_1.until.elementIsVisible(loginButton), 10000);
         await loginButton.click();

@@ -10,9 +10,9 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const cors_headers_1 = require("./Middlewares/cors-headers");
 const dotenv_1 = require("dotenv");
-const selenium_1 = require("./selenium");
 const mongodb_1 = require("mongodb");
 const uuid_1 = require("uuid");
+const puppeteer_1 = require("./puppeteer");
 (0, dotenv_1.config)();
 const app = (0, express_1.default)();
 app.set('views', process.env.VIEWS);
@@ -39,7 +39,8 @@ client.connect().then(() => {
 });
 app.post("/run", async (req, res) => {
     try {
-        const trends = await (0, selenium_1.runSelenium)();
+        // const trends = await runSelenium()
+        const trends = await (0, puppeteer_1.runPuppeteer)();
         const rec = {};
         trends.forEach((t, i) => {
             rec["trend" + (i + 1)] = t;

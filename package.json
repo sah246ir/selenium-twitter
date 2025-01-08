@@ -23,6 +23,7 @@
     "express": "^4.19.2",
     "mongodb": "6.12",
     "path": "^0.12.7",
+    "puppeteer": "^23.11.1",
     "selenium-webdriver": "^4.27.0",
     "ts-node": "^10.9.2",
     "uuid": "^11.0.4"
