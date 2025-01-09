@@ -32,12 +32,19 @@
         .error {
             color: red;
         }
+        .loading {
+            color: green;
+        }
+        .none{
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>API Interface</h1>
         <button id="fetchButton">Fetch Latest Trends</button>
+        <p class="loading none">Fetching trends</p>
         <h1 style="margin-bottom: 5px;">
             These are the most happening topics as on 
             <span style="font-size: smaller; font-weight: normal;"><%= trend.timestamp %></span>
@@ -56,6 +63,7 @@
     <script>
         document.getElementById("fetchButton").addEventListener("click", async function () {
             try {
+                document.querySelector(".loading").classList.toggle("none")
                 const response = await fetch('<%=server%>/run', {
                     method: 'POST',
                 });
@@ -66,6 +74,7 @@
                 window.location.reload()
                 // If the request is successful, reload the page
             } catch (error) {
+                document.querySelector(".loading").classList.toggle("none")
                 // Display an alert in case of an error
                 alert("Failed to fetch trends. Please try again later.");
             }
