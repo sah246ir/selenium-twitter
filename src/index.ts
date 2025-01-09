@@ -59,7 +59,7 @@ app.post("/run",async(req,res)=>{
         res.status(200).redirect("/") 
     }catch(e){
         console.log(e)
-        res.status(500).redirect("/") 
+        res.status(500).json({mesage:"Error"})
 
     }
 })

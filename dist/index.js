@@ -60,7 +60,7 @@ app.post("/run", async (req, res) => {
     }
     catch (e) {
         console.log(e);
-        res.status(500).redirect("/");
+        res.status(500).json({ mesage: "Error" });
     }
 });
 app.get("/", async (req, res) => {

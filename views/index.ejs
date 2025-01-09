@@ -37,7 +37,7 @@
 <body>
     <div class="container">
         <h1>API Interface</h1>
-        <form method="post" action="<%=server%>/run"><button id="fetchButton">Fetch Latest Trends</button></form>
+        <button id="fetchButton">Fetch Latest Trends</button>
         <h1 style="margin-bottom: 5px;">
             These are the most happening topics as on 
             <span style="font-size: smaller; font-weight: normal;"><%= trend.timestamp %></span>
@@ -53,6 +53,23 @@
            <li><%=trend.trend5%></li>
         </ol>
     </div>
- 
+    <script>
+        document.getElementById("fetchButton").addEventListener("click", async function () {
+            try {
+                const response = await fetch('<%=server%>/run', {
+                    method: 'POST',
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                window.location.reload()
+                // If the request is successful, reload the page
+            } catch (error) {
+                // Display an alert in case of an error
+                alert("Failed to fetch trends. Please try again later.");
+            }
+        });
+    </script>
 </body>
 </html>

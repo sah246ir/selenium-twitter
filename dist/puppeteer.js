@@ -15,7 +15,7 @@ const runPuppeteer = async () => {
             // Add arguments to reduce internal warnings
             '--disable-infobars',
             '--no-sandbox',
-            `--proxy-server=${process.env.PROXY_HOST}`,
+            // `--proxy-server=${process.env.PROXY_HOST}`, 
             '--disable-setuid-sandbox'
         ],
         extraPrefsFirefox: {
@@ -25,10 +25,10 @@ const runPuppeteer = async () => {
         timeout: 60000
     });
     const page = await browser.newPage();
-    await page.authenticate({
-        username: process.env.PROXY_USERNAME || "",
-        password: process.env.PROXY_PASSWORD || "",
-    });
+    // await page.authenticate({
+    //     username: process.env.PROXY_USERNAME || "",
+    //     password: process.env.PROXY_PASSWORD || "",
+    // });
     await page.setViewport({
         width: 1920,
         height: 1080
@@ -47,8 +47,12 @@ const runPuppeteer = async () => {
             }
         });
         // Navigate to the login page
-        await page.goto("https://myexternalip.com/raw", { waitUntil: "networkidle2", timeout: 610000 });
-        const ip = await page.evaluate(() => document.body.innerText.trim());
+        let ip = "";
+        try {
+            await page.goto("https://myexternalip.com/raw", { waitUntil: "networkidle2", timeout: 610000 });
+            ip = await page.evaluate(() => document.body.innerText.trim());
+        }
+        catch { }
         await page.goto("https://x.com/i/flow/login", { waitUntil: "networkidle2", timeout: 610000 });
         // Wait for the username input field and enter username
         await page.waitForSelector("input[name='text']", { timeout: 210000 });
@@ -94,7 +98,7 @@ const runPuppeteer = async () => {
     }
     catch (error) {
         console.error("Error scraping trends:", error);
-        return undefined;
+        throw error;
     }
     finally {
         await browser.close();
